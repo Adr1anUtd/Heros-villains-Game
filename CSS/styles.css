@@ -1,0 +1,39 @@
+/*CSS de Pagina principal y formulario*/
+body{
+    background-color: #F4F1EC;
+}
+main{
+    text-align: center;
+    margin: 15px auto 15px auto;
+}
+form{
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+form label{
+    display: block;
+}
+input, select{
+    border-radius: 5px; 
+    border: 1px solid black;
+    padding: 5px 20px;
+    text-align: center;
+}
+input[type="submit"]{
+    background-color: #EA5455;
+    font-weight: bold;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 10px 30px;
+}
+input[type="submit"]:hover{
+    background-color: #E63F33;
+}
+#error{
+    padding-top: 20px;
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}

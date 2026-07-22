@@ -1,13 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heros&Villains</title>
+    <link rel="stylesheet" href="./CSS/styles.css">
+    <title>Heroes y Villanos</title>
 </head>
 <body>
     <main>
-        <h1>Heros & Villains Game</h1>
+        <h1>Heroes y Villanos</h1>
+        <img src="" alt="logo">
+
+        <form action="./game.html" id="form">
+            <div class="itemform">
+                <label for="Nickname">Nickname</label>
+                <input type="text" id="nickname">
+            </div>
+            <div class="itemform">
+                <select name="dificulty" id="dificulty">
+                    <option value="">--Selecciona dificultad del juego--</option>
+                    <option value="1">Baja</option>
+                    <option value="2">Media</option>
+                    <option value="3">Alta</option>
+                </select>
+            </div>
+            <div class="itemform">
+                <select name="cards" id="cards">
+                    <option value="">--Selecciona el numero de cartas--</option>
+                    <option value="3">3x3</option>
+                    <option value="4">4x4</option>
+                    <option value="5">5x5</option>
+                </select>
+            </div>
+            <div class="itemform">
+                <input type="submit" value="JUGAR">
+            </div>
+        </form>
+        <div id="error"></div>
     </main>
+
+    <script src="./JS/app.js"></script>
 </body>
 </html>
