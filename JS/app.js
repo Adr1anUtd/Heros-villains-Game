@@ -3,19 +3,24 @@
  */
 
 //Variables
-var nickname;
-var error;
-var submitForm;
+var nickname; //nick creado por el usuario
+var error; //mensaje de error si se rellena mal el formulario
+var selectDificulty; //dificultad seleccionada por el jugador
+var totalCards;
+var submitForm; 
 
 /**
  * Funciones de evento
  */
 function checkForm(event){
     if(nickname.value.trim()==="" || nickname.value.length<0){
+        event.preventDefault();
         error.innerText="Nickname no valido!"
-    }else{
-        console.log("form rellenado correctamente");
+    }else if(totalCards.value==""){
+        event.preventDefault();
+        error.innerText="Selecciona la cantidad de cartas!"
     }
+    return;
 }
 
 /**
@@ -26,6 +31,8 @@ function DOMloaded(){
     nickname=document.getElementById('nickname');
     error=document.getElementById('error');
     submitForm=document.getElementById('form');
+    selectDificulty=document.getElementById('dificulty');
+    totalCards=document.getElementById('totalcards');
 
     /**
      * Carga de eventos
