@@ -1,0 +1,51 @@
+body{
+    text-align: center;
+    background-color: #F4F1EC;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    margin: 10px auto 10px auto;
+    flex-wrap: wrap;
+    text-align: center;
+}
+#gamecontainer{
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    width: 700px;
+    padding: 10px;
+}
+#title{
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    margin: 0px;
+}
+#cardscontainer{
+    position: relative;
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 5px;
+    gap: 10px;  
+}
+.card {
+    position: relative; 
+    width: 150px;
+    height: 200px;
+}
+.cardfront, .cardback{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 200px;
+    border-radius: 5px;
+}
+.cardfront{
+    z-index: 3;
+}
+.cardback{
+    z-index: 2;
+}
