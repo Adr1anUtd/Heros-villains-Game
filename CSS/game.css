@@ -44,7 +44,7 @@ body{
     border-radius: 5px;
 }
 .cardfront{
-    z-index: 3;
+    z-index: 1;
 }
 .cardback{
     z-index: 2;

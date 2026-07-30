@@ -37,3 +37,30 @@ input[type="submit"]:hover{
     font-weight: bold;
     text-align: center;
 }
+#avatar-section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#main-avatar{
+    border: 3px solid red;
+    border-style: dotted;
+    border-radius: 5px;
+}
+#main-avatar img{
+    width: 150px;
+    height: 150px;
+    padding: 5px;
+}
+#avatars{
+    margin: 0 10px 0 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+#avatars img{
+    width: 80px;
+    height: 80px;
+}
