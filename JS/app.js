@@ -19,20 +19,56 @@ function checkForm(event){
     if(nickname.value.trim()==="" || nickname.value.length<0){
         event.preventDefault();
         error.innerText="Nickname no valido!"
+        return false;
+    }else if(selectDificulty.value==""){
+        event.preventDefault();
+        error.innerText="Selecciona una dificultad!"
+        return false;
     }else if(totalCards.value==""){
         event.preventDefault();
         error.innerText="Selecciona la cantidad de cartas!"
+        return false;
     }
-    saveUserData();
-    return;
+    saveUser(nickname, avatar, selectDificulty, totalCards);
+    UserData();
+    return true;
 }
 
-function saveUserData(){
+//Se guardan datos de usuario actual
+function saveUser(nickname, avatar, selectDificulty, totalCards){
+    sessionStorage.setItem('nick', nickname.value);
+    sessionStorage.setItem('avatar', avatar.src);
+    sessionStorage.setItem('dificulty', selectDificulty.value);
+    sessionStorage.setItem('totalcards', totalCards.value);
+}
+
+function getUser(){
+    userNick=sessionStorage.getItem('nick');
+    useravatar=sessionStorage.getItem('avatar');
+    userdificulty=sessionStorage.getItem('dificulty');
+    usercards=sessionStorage.getItem('totalcards');
+}
+/**
+ * Se verifica y se crean datos de usuario si no existen en el storage
+ */
+function UserData(){
     let userData={
         "nickname": nickname.value,
-        "avatar": avatar.src,
+        "date": Date.now()
     }
-    localStorage.setItem('users', JSON.stringify(userData));
+    let usersHistory=localStorage.getItem('users');
+    let users;
+    if(usersHistory==null){
+        users=[];
+    }else{
+        users=JSON.parse(usersHistory);
+        for(let user of users){
+            if(user.nickname==nickname.value) return;
+        }
+    }
+    users.push(userData);
+    localStorage.setItem('users', JSON.stringify(users));
+    return users;
 }
 
 function dragItem(event){
