@@ -47,11 +47,18 @@ function renderGame(){
         let index= Math.floor(Math.random(characters[cardtype])*characters[cardtype].length);
         let card=characters[cardtype][index];
         cardsContainer.innerHTML+=`<div class="card">
-                    <img src="./media/back card design.png" alt="" class="cardback">
+                    <img src="./media/back card design.png" alt="" class="cardback" data-id="${cardtype}">
                     <img src="./media/${cardtype}/${card}.jpg" alt="" class="cardfront">
                     </div>`
         characters[cardtype].splice(index, 1); //eliminamos card elegida para que no se repita
     }
+}
+
+function flipcard(event){
+    cardclicked=event.target;
+    cardclicked.style.zIndex="1";
+    console.log(cardclicked.dataset.id);
+    setTimeout(()=>{cardclicked.style.zIndex="3"}, 3000);
 }
 
 //Obtenemos datos de usuario actual
@@ -64,3 +71,11 @@ getUserNick(userNick);
 getDificulty(userdificulty);
 //Renderizamos juego segun cantidad de cartas
 renderGame();
+
+/**
+ * Eventos
+ */
+var cards=document.getElementsByClassName('card');
+for(let item of cards){
+    item.addEventListener('click', flipcard);
+}

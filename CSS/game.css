@@ -47,10 +47,10 @@ body{
     border-radius: 5px;
 }
 .cardfront{
-    z-index: 3;
+    z-index: 2;
 }
 .cardback{
-    z-index: 2;
+    z-index: 3;
 }
 /*CSS para la visualizacion de datos del usuario*/
 #avatar-game{
@@ -77,4 +77,10 @@ input[type="text"]{
     font-size: 14px;
     padding: 5px;
     text-align: center;
+}
+#game-points{
+    background-color: #9CA3AF;
+    color: #BB2528;
+    font-weight: bold;
+    font-size: 16px;
 }
