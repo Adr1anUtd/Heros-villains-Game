@@ -38,10 +38,47 @@ var characters={
 var cardType=["heros", "villains"];
 function renderGame(){
     usercards=Number(usercards)
-    hero_count=0;
-    villain_count=0;
     cardsContainer.style.gridTemplateColumns=`repeat(${usercards}, 1fr)`
-    for (let i = 0; i < usercards*usercards; i++) {
+
+    var totalcells=usercards*usercards;
+    var paircount= Math.floor(totalcells/4);
+    var specialslots=totalcells%4;
+
+    var deck=[];
+
+    //Hero pairs
+    for(let i=0; i<paircount; i++){
+        var hero=characters.heros[Math.floor(Math.random()* characters.heros.length)];
+        deck.push({ type: "heros", card: hero});
+        deck.push({ type: "heros", card: hero});
+    }
+
+    //villain pair
+    for(let i=0; i<paircount; i++){
+        var villain=characters.villains[Math.floor(Math.random()* characters.villains.length)];
+        deck.push({ type: "villains", card: villain});
+        deck.push({ type: "villains", card: villain});
+    }
+
+    //Extra slots for special cards
+    for(let i=0; i<specialslots; i++){
+        deck.push({type: "special", card: "shuffle"})
+    }
+
+    //Shuffle Deck
+    for (let i = deck.length - 1; i >= 1; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+
+    cardsContainer.innerHTML="";
+    for(let item of deck){
+        cardsContainer.innerHTML+=`<div class="card">
+                    <img src="./media/back card design.png" alt="" class="cardback" data-name="${item.card}">
+                    <img src="./media/${item.type}/${item.card}.jpg" alt="" class="cardfront">
+                    </div>`
+    }
+    /*for (let i = 0; i < usercards*usercards; i++) {
         let index_1=Math.floor(Math.random(cardType)*cardType.length);
         let cardtype=cardType[index_1];
         let index= Math.floor(Math.random(characters[cardtype])*characters[cardtype].length);
@@ -51,15 +88,33 @@ function renderGame(){
                     <img src="./media/${cardtype}/${card}.jpg" alt="" class="cardfront">
                     </div>`
         characters[cardtype].splice(index, 1); //eliminamos card elegida para que no se repita
+    }*/
+}
+
+var firstCard=null;
+var firstCardClicked=false;
+function flipcard(event){
+    var cardClicked=event.target;
+
+    if(!firstCardClicked){
+        firstCard=cardClicked;
+        firstCardClicked=true;
+        firstCard.style.zIndex="1";
+        console.log(firstCard.dataset.name);
+    }else{
+        cardClicked.style.zIndex="1";
+        console.log(cardClicked.dataset.name);
+        if(firstCard.dataset.name==cardClicked.dataset.name){
+            //Solo mantiene las 2 cartas volteadas
+        }else{
+            console.log("no coinciden");
+            setTimeout(()=>{firstCard.style.zIndex="3"}, 300)
+            setTimeout(()=>{cardClicked.style.zIndex="3"}, 300)
+        }
+        firstCardClicked=false;
     }
 }
 
-function flipcard(event){
-    cardclicked=event.target;
-    cardclicked.style.zIndex="1";
-    console.log(cardclicked.dataset.id);
-    setTimeout(()=>{cardclicked.style.zIndex="3"}, 3000);
-}
 
 //Obtenemos datos de usuario actual
 getUser();
