@@ -84,3 +84,10 @@ input[type="text"]{
     font-weight: bold;
     font-size: 16px;
 }
+input[type="button"]{
+    padding: 10px;
+    color: #BB2528;
+    background-color: black;
+    border-radius: 5px;
+    border: 1px solid;
+}

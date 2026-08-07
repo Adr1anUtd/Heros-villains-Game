@@ -7,6 +7,7 @@ var displayNick=document.getElementById('game-user');
 var displayDificulty=document.getElementById('game-dificulty');
 var gametries=document.getElementById('game-tries');
 var cardsContainer=document.getElementById('cardscontainer');
+var gamePoints=document.getElementById('game-points');
 
 //Funciones de juego
 function getUserAvatar(){
@@ -35,7 +36,6 @@ var characters={
     "heros": ["ace","chopper","hancock","jinbe","law","luffy","sanji","shanks","usopp","vivi","yamato","zoro"],
     "villains": ["akainu","arlong","buggy","crocodile","doflamingo","enel","kaido","lucci","moria","queen","rocksdxebec","teach"]
 }
-var cardType=["heros", "villains"];
 function renderGame(){
     usercards=Number(usercards)
     cardsContainer.style.gridTemplateColumns=`repeat(${usercards}, 1fr)`
@@ -78,21 +78,11 @@ function renderGame(){
                     <img src="./media/${item.type}/${item.card}.jpg" alt="" class="cardfront">
                     </div>`
     }
-    /*for (let i = 0; i < usercards*usercards; i++) {
-        let index_1=Math.floor(Math.random(cardType)*cardType.length);
-        let cardtype=cardType[index_1];
-        let index= Math.floor(Math.random(characters[cardtype])*characters[cardtype].length);
-        let card=characters[cardtype][index];
-        cardsContainer.innerHTML+=`<div class="card">
-                    <img src="./media/back card design.png" alt="" class="cardback" data-id="${cardtype}">
-                    <img src="./media/${cardtype}/${card}.jpg" alt="" class="cardfront">
-                    </div>`
-        characters[cardtype].splice(index, 1); //eliminamos card elegida para que no se repita
-    }*/
 }
 
 var firstCard=null;
 var firstCardClicked=false;
+gamePoints.value=0;
 function flipcard(event){
     var cardClicked=event.target;
 
@@ -100,21 +90,70 @@ function flipcard(event){
         firstCard=cardClicked;
         firstCardClicked=true;
         firstCard.style.zIndex="1";
-        console.log(firstCard.dataset.name);
     }else{
         cardClicked.style.zIndex="1";
-        console.log(cardClicked.dataset.name);
         if(firstCard.dataset.name==cardClicked.dataset.name){
-            //Solo mantiene las 2 cartas volteadas
+            //Mantener las 2 cartas volteadas y sumar puntuacion
+            gamePoints.value= parseInt(gamePoints.value) +1; 
         }else{
-            console.log("no coinciden");
             setTimeout(()=>{firstCard.style.zIndex="3"}, 300)
             setTimeout(()=>{cardClicked.style.zIndex="3"}, 300)
         }
         firstCardClicked=false;
+        //disminuimos los intentos a si falla al emparejar cartas 
+        gametries.value=parseInt(gametries.value)-1;
+        gameOver();
     }
 }
 
+function gameOver(){
+    if(gametries.value<=0){
+        cardsContainer.innerHTML="";
+        buttonInput= document.createElement('input');
+        buttonInput.type="button";
+        buttonInput.value="Intentar de nuevo";
+        buttonInput.id="try-again";
+        cardsContainer.appendChild(buttonInput);
+
+        //CSS del cardContainer y button cuando hay gameover
+        cardsContainer.style.backgroundColor="#9CA3AF"
+        cardsContainer.style.display="flex"
+        cardsContainer.style.alignItems="center"
+        cardsContainer.style.justifyContent="center"
+        cardsContainer.style.width="590px"
+        cardsContainer.style.height="510px"
+
+        var tryagain=document.getElementById('try-again');
+        //boton de intentar de nuevo
+        tryagain.addEventListener('click', restartGame);
+    }
+}
+
+function resetCSS(){
+    cardsContainer.style.position="relative";
+    cardsContainer.style.display="grid";
+    cardsContainer.style.justifyContent="space-between";
+    cardsContainer.style.margin="5px";
+    cardsContainer.style.gap="10px"
+    cardsContainer.style.backgroundColor="#F4F1EC"
+}
+
+function bindCardsEvent(){
+    var cards=document.getElementsByClassName('card');
+    for(let item of cards){
+        item.addEventListener('click', flipcard);
+    }
+}
+
+function restartGame(){
+    firstCard=null;
+    firstCardClicked=false;
+    gamePoints.value = 0;
+    resetCSS();
+    getDificulty(userdificulty);
+    renderGame();
+    bindCardsEvent();
+}
 
 //Obtenemos datos de usuario actual
 getUser();
@@ -124,13 +163,10 @@ getUserAvatar();
 getUserNick(userNick);
 //Obtenemos dificultad elegida por el usuario
 getDificulty(userdificulty);
-//Renderizamos juego segun cantidad de cartas
+//Renderizamos juego
 renderGame();
 
 /**
  * Eventos
  */
-var cards=document.getElementsByClassName('card');
-for(let item of cards){
-    item.addEventListener('click', flipcard);
-}
+bindCardsEvent(); 
