@@ -32,6 +32,13 @@ function getDificulty(userdificulty){
     return;
 }
 
+function getUserAdvantages(useradvantages, cardback){
+    if(useradvantages=="1"){
+        cardback.style.zIndex="1"
+        setTimeout(()=>{cardback.style.zIndex="3"}, 400);
+    }
+}
+
 var characters={
     "heros": ["ace","chopper","hancock","jinbe","law","luffy","sanji","shanks","usopp","vivi","yamato","zoro"],
     "villains": ["akainu","arlong","buggy","crocodile","doflamingo","enel","kaido","lucci","moria","queen","rocksdxebec","teach"]
@@ -86,6 +93,13 @@ function renderGame(){
                     <img src="./media/back card design.png" alt="" class="cardback" data-type="${item.type}" data-name="${item.card}">
                     <img src="./media/${item.type}/${item.card}.jpg" alt="" class="cardfront">
                     </div>`
+    }
+    //variable de todas las cartas anadidas para la ventaja de revelar las cartas
+    var cardBacks=document.getElementsByClassName('cardback');
+    console.log(useradvantages);
+    for(cardback of cardBacks){
+        console.log(cardback);
+        getUserAdvantages(useradvantages, cardback);
     }
 }
 

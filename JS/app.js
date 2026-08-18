@@ -11,6 +11,7 @@ var submitForm;
 var avatar; //Avatar principal seleccionado por el usuario
 var dragabbleItem; //Avatares que puede arrastrar y seleccionar el usuario
 var avatarContainer; //Contenedor del avatar
+var advantages; //Si el usuario elige una ventaja
 
 /**
  * Funciones de evento
@@ -29,17 +30,18 @@ function checkForm(event){
         error.innerText="Selecciona la cantidad de cartas!"
         return false;
     }
-    saveUser(nickname, avatar, selectDificulty, totalCards);
+    saveUser(nickname, avatar, selectDificulty, totalCards, advantages);
     UserData();
     return true;
 }
 
 //Se guardan datos de usuario actual
-function saveUser(nickname, avatar, selectDificulty, totalCards){
+function saveUser(nickname, avatar, selectDificulty, totalCards, advantages){
     sessionStorage.setItem('nick', nickname.value);
     sessionStorage.setItem('avatar', avatar.src);
     sessionStorage.setItem('dificulty', selectDificulty.value);
     sessionStorage.setItem('totalcards', totalCards.value);
+    sessionStorage.setItem('advantages', advantages.value);
 }
 
 function getUser(){
@@ -47,6 +49,7 @@ function getUser(){
     useravatar=sessionStorage.getItem('avatar');
     userdificulty=sessionStorage.getItem('dificulty');
     usercards=sessionStorage.getItem('totalcards');
+    useradvantages=sessionStorage.getItem('advantages');
 }
 /**
  * Se verifica y se crean datos de usuario si no existen en el storage
@@ -92,6 +95,7 @@ function DOMloaded(){
     avatar=document.getElementById('avatar-selected');
     dragabbleItem=document.getElementsByClassName('avatar');
     avatarContainer=document.getElementById('main-avatar');
+    advantages=document.getElementById('advantages');
 
     /**
      * Carga de eventos
