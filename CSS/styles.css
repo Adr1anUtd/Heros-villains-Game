@@ -64,3 +64,7 @@ input[type="submit"]:hover{
     width: 80px;
     height: 80px;
 }
+#logo{
+    border-radius: 200px;
+    border: 2px solid black;
+}

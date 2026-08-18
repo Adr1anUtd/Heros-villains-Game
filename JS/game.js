@@ -32,10 +32,16 @@ function getDificulty(userdificulty){
     return;
 }
 
-function getUserAdvantages(useradvantages, cardback){
+function showCardAdvantage(useradvantages, cardback){
     if(useradvantages=="1"){
         cardback.style.zIndex="1"
-        setTimeout(()=>{cardback.style.zIndex="3"}, 400);
+        setTimeout(()=>{cardback.style.zIndex="3"}, 800);
+    }
+}
+
+function gametriesAdvantage(useradvantages){
+    if(useradvantages=="2"){
+        gametries.value=parseInt(gametries.value) + 3;
     }
 }
 
@@ -49,15 +55,16 @@ function renderGame(){
 
     var totalcells=usercards*usercards;
     var deck=[];
+    var paircount;
     if(totalcells===16){
-        var paircount= 3;
+        paircount= 3;
         var specialslots=4;
         for(let i=0; i<specialslots/2; i++){
             deck.push({type: "special", card: "minusone"})
             deck.push({type: "special", card: "skull"})
         }
     }else{
-        var paircount= Math.floor(totalcells/4);
+        paircount= Math.floor(totalcells/4);
         var specialslots=totalcells%4;
         //Extra slots for special cards
         for(let i=0; i<specialslots; i++){
@@ -96,11 +103,10 @@ function renderGame(){
     }
     //variable de todas las cartas anadidas para la ventaja de revelar las cartas
     var cardBacks=document.getElementsByClassName('cardback');
-    console.log(useradvantages);
     for(cardback of cardBacks){
-        console.log(cardback);
-        getUserAdvantages(useradvantages, cardback);
+        showCardAdvantage(useradvantages, cardback);
     }
+    gametriesAdvantage(useradvantages);
 }
 
 var firstCard=null;
@@ -111,7 +117,17 @@ function flipcard(event){
     var cardName=cardClicked.dataset.name;
     var cardType=cardClicked.dataset.type;
 
-    //Single minustwo for the 3x3 & 5x5 board
+    //Valriables necesarias para hacer logica de juego completado
+    usercards=Number(usercards)
+    var totalcells=usercards*usercards;
+    var paircount;
+    if(totalcells===16){
+        paircount= 3;
+    }else{
+        paircount= Math.floor(totalcells/4);
+    }
+
+    //carta de menos 2 para los tableros 3x3 y 5x5
     if(cardType=== "special" && cardName==="minustwo"){
         cardClicked.style.zIndex="1";
         setTimeout(()=>{firstCard.style.zIndex="3"}, 500)
@@ -145,6 +161,41 @@ function flipcard(event){
         //disminuimos los intentos a si falla al emparejar cartas 
         gametries.value=parseInt(gametries.value)-1;
         gameOver();
+        gameCompleted(paircount);
+    }
+}
+
+function gameCompleted(paircount){
+    if(parseInt(gamePoints.value)===parseInt(paircount+paircount)){
+        cardsContainer.innerHTML="";
+        //Anadimos mensaje ganador y boton para volver a jugar
+        winnerMessage=document.createElement('div');
+        winnerMessage.id="winner-message";
+        winnerMessage.textContent="Has completado el Juego!"
+        buttonInput= document.createElement('input');
+        buttonInput.type="button";
+        buttonInput.value="volver a jugar";
+        buttonInput.id="play-again";
+        winnerMessage.appendChild(buttonInput);
+        cardsContainer.appendChild(winnerMessage);
+
+        //CSS 
+        cardsContainer.style.backgroundColor="#9CA3AF"
+        winnerMessage.style.display="flex"
+        winnerMessage.style.flexDirection="column";
+        winnerMessage.style.gap="20px"
+        winnerMessage.style.alignItems="center"
+        winnerMessage.style.justifyContent="center"
+        
+        cardsContainer.style.display="flex"
+        cardsContainer.style.alignItems="center"
+        cardsContainer.style.justifyContent="center"
+        cardsContainer.style.width="590px"
+        cardsContainer.style.height="510px"
+
+        //Boton de jugar de nuevo crea un nuevo tablero
+        var playAgainButton=document.getElementById('play-again');
+        playAgainButton.addEventListener('click', restartGame);
     }
 }
 
