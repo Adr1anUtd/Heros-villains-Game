@@ -41,10 +41,23 @@ function renderGame(){
     cardsContainer.style.gridTemplateColumns=`repeat(${usercards}, 1fr)`
 
     var totalcells=usercards*usercards;
-    var paircount= Math.floor(totalcells/4);
-    var specialslots=totalcells%4;
-
     var deck=[];
+    if(totalcells===16){
+        var paircount= 3;
+        var specialslots=4;
+        for(let i=0; i<specialslots/2; i++){
+            deck.push({type: "special", card: "minusone"})
+            deck.push({type: "special", card: "skull"})
+        }
+    }else{
+        var paircount= Math.floor(totalcells/4);
+        var specialslots=totalcells%4;
+        //Extra slots for special cards
+        for(let i=0; i<specialslots; i++){
+            deck.push({type: "special", card: "minustwo"})
+        }
+    }
+    
 
     //Hero pairs
     for(let i=0; i<paircount; i++){
@@ -60,10 +73,6 @@ function renderGame(){
         deck.push({ type: "villains", card: villain});
     }
 
-    //Extra slots for special cards
-    for(let i=0; i<specialslots; i++){
-        deck.push({type: "special", card: "shuffle"})
-    }
 
     //Shuffle Deck
     for (let i = deck.length - 1; i >= 1; i--) {
@@ -74,7 +83,7 @@ function renderGame(){
     cardsContainer.innerHTML="";
     for(let item of deck){
         cardsContainer.innerHTML+=`<div class="card">
-                    <img src="./media/back card design.png" alt="" class="cardback" data-name="${item.card}">
+                    <img src="./media/back card design.png" alt="" class="cardback" data-type="${item.type}" data-name="${item.card}">
                     <img src="./media/${item.type}/${item.card}.jpg" alt="" class="cardfront">
                     </div>`
     }
@@ -85,16 +94,35 @@ var firstCardClicked=false;
 gamePoints.value=0;
 function flipcard(event){
     var cardClicked=event.target;
+    var cardName=cardClicked.dataset.name;
+    var cardType=cardClicked.dataset.type;
+
+    //Single minustwo for the 3x3 & 5x5 board
+    if(cardType=== "special" && cardName==="minustwo"){
+        cardClicked.style.zIndex="1";
+        setTimeout(()=>{firstCard.style.zIndex="3"}, 500)
+        gametries.value=parseInt(gametries.value)-2;
+        return;
+    }
 
     if(!firstCardClicked){
         firstCard=cardClicked;
         firstCardClicked=true;
-        firstCard.style.zIndex="1";
+        firstCard.style.zIndex="1"; 
     }else{
         cardClicked.style.zIndex="1";
         if(firstCard.dataset.name==cardClicked.dataset.name){
-            //Mantener las 2 cartas volteadas y sumar puntuacion
-            gamePoints.value= parseInt(gamePoints.value) +1; 
+            if(firstCard.dataset.type==='special'){
+                if(firstCard.dataset.name==='minusone'){
+                    gametries.value=parseInt(gametries.value)-1;
+                }else if(firstCard.dataset.name==='skull'){
+                    gametries.value=0;
+                }
+            }else{
+                //Mantener las 2 cartas volteadas y sumar puntuacion
+                gamePoints.value= parseInt(gamePoints.value) +1; 
+                gametries.value=parseInt(gametries.value)+2;
+            } 
         }else{
             setTimeout(()=>{firstCard.style.zIndex="3"}, 300)
             setTimeout(()=>{cardClicked.style.zIndex="3"}, 300)
