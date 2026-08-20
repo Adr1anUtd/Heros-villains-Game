@@ -8,6 +8,7 @@ var displayDificulty=document.getElementById('game-dificulty');
 var gametries=document.getElementById('game-tries');
 var cardsContainer=document.getElementById('cardscontainer');
 var gamePoints=document.getElementById('game-points');
+var visibleTime;
 
 //Funciones de juego
 function getUserAvatar(){
@@ -22,12 +23,15 @@ function getDificulty(userdificulty){
     if(userdificulty == "1"){
         displayDificulty.value = "Baja"
         gametries.value=15;
+        visibleTime=1500;
     }else if(userdificulty == "2"){
         displayDificulty.value="Media"
         gametries.value=10;
+        visibleTime=800;
     }else{
         displayDificulty.value="Alta"
         gametries.value=5;
+        visibleTime=400;
     }
     return;
 }
@@ -74,15 +78,25 @@ function renderGame(){
     
 
     //Hero pairs
+    for (let i = characters.heros.length - 1; i >= 1; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [characters.heros[i], characters.heros[j]] = [characters.heros[j], characters.heros[i]];
+    }
+
     for(let i=0; i<paircount; i++){
-        var hero=characters.heros[Math.floor(Math.random()* characters.heros.length)];
+        var hero=characters.heros[i];
         deck.push({ type: "heros", card: hero});
         deck.push({ type: "heros", card: hero});
     }
 
     //villain pair
+    for (let i = characters.villains.length - 1; i >= 1; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [characters.villains[i], characters.villains[j]] = [characters.villains[j], characters.villains[i]];
+    }
+
     for(let i=0; i<paircount; i++){
-        var villain=characters.villains[Math.floor(Math.random()* characters.villains.length)];
+        var villain=characters.villains[i];
         deck.push({ type: "villains", card: villain});
         deck.push({ type: "villains", card: villain});
     }
@@ -154,8 +168,8 @@ function flipcard(event){
                 gametries.value=parseInt(gametries.value)+2;
             } 
         }else{
-            setTimeout(()=>{firstCard.style.zIndex="3"}, 300)
-            setTimeout(()=>{cardClicked.style.zIndex="3"}, 300)
+            setTimeout(()=>{firstCard.style.zIndex="3"}, visibleTime)
+            setTimeout(()=>{cardClicked.style.zIndex="3"}, visibleTime)
         }
         firstCardClicked=false;
         //disminuimos los intentos a si falla al emparejar cartas 
